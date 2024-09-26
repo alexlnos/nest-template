@@ -1,0 +1,15 @@
+export enum ErrorValidationCodeEnum {
+    IS_NOT_EMPTY = 'IS_NOT_EMPTY',
+    IS_OPTIONAL = 'IS_OPTIONAL',
+    IS_ENUM = 'IS_ENUM',
+    IS_EMAIL = 'IS_EMAIL',
+    IS_STRING = 'IS_STRING',
+    IS_PHONE_NUMBER = 'IS_PHONE_NUMBER',
+    IS_INT = 'IS_INT',
+    IS_ARRAY = 'IS_ARRAY',
+    IS_BOOLEAN = 'IS_BOOLEAN',
+    IS_DATE = 'IS_DATE',
+    IS_URL = 'IS_URL',
+    IS_OBJECT = 'IS_OBJECT',
+    DECIMAL = 'DECIMAL',
+}
