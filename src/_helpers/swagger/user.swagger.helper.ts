@@ -1,15 +1,15 @@
-import { applyDecorators, Delete, Get, Post, Put } from '@nestjs/common'
+import { Delete, Get, Post, Put, applyDecorators } from '@nestjs/common'
 import { ApiBody, ApiResponse } from '@nestjs/swagger'
 
-import { ErrorDto } from '../errors/error.dto'
 import { UserAuth, UserAuthType } from '../decorators/reqests.helpers'
+import { ErrorDto } from '../errors/error.dto'
 
 export function UserDockGetOne(path: string, authType: UserAuthType, success = null) {
     return applyDecorators(
         Get(path),
         UserAuth(authType),
         ApiResponse({ status: 200, type: success }),
-        ApiResponse({ status: 400, type: ErrorDto }),
+        ApiResponse({ status: 400, type: ErrorDto })
     )
 }
 

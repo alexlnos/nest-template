@@ -3,14 +3,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { buildDataSourceOptions } from './database.provider'
+import { validationSchema } from './env.validation'
 import { UserModule } from './system/user/user.module'
-import {validationSchema} from "./env.validation";
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            validationSchema
+            validationSchema,
         }),
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
@@ -22,5 +22,4 @@ import {validationSchema} from "./env.validation";
     controllers: [],
     providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}

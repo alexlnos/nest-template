@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Exclude } from 'class-transformer'
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 
 import { User } from './user.entity'

@@ -1,15 +1,15 @@
-import { applyDecorators, Get, Type } from '@nestjs/common'
+import { Get, Type, applyDecorators } from '@nestjs/common'
 import { ApiExtraModels, ApiOkResponse, ApiQuery, ApiResponse, getSchemaPath } from '@nestjs/swagger'
 
-import { PaginatedResponseDto } from '../pagination/dto/pagination-response.dto'
 import { UserAuth, UserAuthType } from '../decorators/reqests.helpers'
 import { ErrorDto } from '../errors/error.dto'
+import { PaginatedResponseDto } from '../pagination/dto/pagination-response.dto'
 
 export function PaginatedDocs<DTO>(
     dto: Type<DTO>,
     path: string = '',
     userAuthType: UserAuthType = null,
-    argDtos: Record<string, Type<any>> = {},
+    argDtos: Record<string, Type<any>> = {}
 ) {
     const extraModels = Object.values(argDtos)
     const requiredKeys = Object.keys(argDtos)
@@ -39,7 +39,7 @@ export function PaginatedDocs<DTO>(
                                     ...acc,
                                     [name]: { $ref: getSchemaPath(type) },
                                 }),
-                                {},
+                                {}
                             ),
                             total: {
                                 type: 'number',
@@ -51,6 +51,6 @@ export function PaginatedDocs<DTO>(
         }),
         ApiResponse({ status: 400, type: ErrorDto }),
         Get(path),
-        ...decorators,
+        ...decorators
     )
 }

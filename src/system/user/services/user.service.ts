@@ -2,16 +2,16 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
+import * as bcrypt from 'bcrypt'
 import { MoreThan, Repository } from 'typeorm'
 
+import { ErrorCodeEnum } from '../../../_helpers/enums/validator/error.code.enum'
+import { ErrorDto } from '../../../_helpers/errors/error.dto'
+import { CreateUserDto } from '../dto/create-user.dto'
 import { UpdateUserDto } from '../dto/update-user.dto'
 import { UserAuthDto } from '../dto/user-auth.dto'
 import { Session } from '../entity/session.entity'
 import { User } from '../entity/user.entity'
-import { ErrorDto } from '../../../_helpers/errors/error.dto'
-import { ErrorCodeEnum } from '../../../_helpers/enums/validator/error.code.enum'
-import * as bcrypt from 'bcrypt'
-import { CreateUserDto } from '../dto/create-user.dto'
 
 @Injectable()
 export class UserService {
@@ -19,9 +19,8 @@ export class UserService {
         private jwtService: JwtService,
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Session) private sessionRepository: Repository<Session>,
-        private configService: ConfigService,
-    ) {
-    }
+        private configService: ConfigService
+    ) {}
 
     get headers() {
         return {
@@ -66,7 +65,7 @@ export class UserService {
     async generateToken(user: User) {
         const token = this.jwtService.sign(
             {},
-            { expiresIn: this.configService.get('JWT_EXPIRES'), secret: this.configService.get('JWT_SECRET') },
+            { expiresIn: this.configService.get('JWT_EXPIRES'), secret: this.configService.get('JWT_SECRET') }
         )
 
         const userVerify = this.jwtService.verify(token, {
@@ -79,7 +78,7 @@ export class UserService {
                 expire_at: new Date(userVerify.exp * 1000),
                 user,
             },
-            { transaction: true },
+            { transaction: true }
         )
     }
 
@@ -94,7 +93,6 @@ export class UserService {
     }
 
     public async update(user: User, dto: UpdateUserDto) {
-
         user = await this.userRepository.save(user)
         return user
     }

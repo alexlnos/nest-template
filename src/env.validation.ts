@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from 'joi'
 
 export const validationSchema = Joi.object({
     DATABASE_HOST: Joi.string().hostname().required(),
@@ -8,5 +8,7 @@ export const validationSchema = Joi.object({
     DATABASE_PASSWORD: Joi.string().required(),
     DATABASE_DB: Joi.string().required(),
     JWT_SECRET: Joi.string().min(8).required(),
-    JWT_EXPIRES: Joi.string().pattern(/^\d+[smhdwy]$/).required(),
-});
+    JWT_EXPIRES: Joi.string()
+        .pattern(/^\d+[smhdwy]$/)
+        .required(),
+})

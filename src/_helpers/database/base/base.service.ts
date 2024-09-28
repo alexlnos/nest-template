@@ -6,8 +6,7 @@ import { ErrorDto } from '../../errors/error.dto'
 import { PaginatedResponseDto } from '../../pagination/dto/pagination-response.dto'
 
 export class BaseService<T, SaveDto extends DeepPartial<T>, UpdateDto extends DeepPartial<T>> {
-    constructor(private readonly repository: Repository<T>) {
-    }
+    constructor(private readonly repository: Repository<T>) {}
 
     async find(options: FindManyOptions<T>) {
         const [result, total] = await this.repository.findAndCount({
