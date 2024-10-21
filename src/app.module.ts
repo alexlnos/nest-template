@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule } from '@nestjs/config'
 
-import { buildDataSourceOptions } from './database.provider'
+import { AppPrismaService } from './app.prisma.service'
 import { validationSchema } from './env.validation'
 import { UserModule } from './system/user/user.module'
 
@@ -12,14 +11,9 @@ import { UserModule } from './system/user/user.module'
             isGlobal: true,
             validationSchema,
         }),
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: buildDataSourceOptions,
-        }),
         UserModule,
     ],
     controllers: [],
-    providers: [],
+    providers: [AppPrismaService],
 })
 export class AppModule {}

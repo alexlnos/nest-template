@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/.generated/prisma"
+  outputToNestJsResourceStructure = "true"
+  flatResourceStructure           = "true"
+  exportRelationModifierClasses   = "false"
+  reExport                        = "true"
+  generateFileTypes               = "all"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  classValidation                 = "true"
+  fileNamingStyle                 = "camel"
+  noDependencies                  = "false"
+  outputType                      = "class"
+  definiteAssignmentAssertion     = "false"
+  requiredResponseApiProperty     = "true"
+  prettier                        = "true"
+  outputApiPropertyType           = "true"
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  sessions   Session[] @relation("UserSessions")
+  /// @DtoReadOnly
+  created_at DateTime  @default(now())
+  /// @DtoReadOnly
+  updated_at DateTime  @updatedAt
+  /// @DtoReadOnly
+  deleted_at DateTime?
+
+  @@map("users")
+}
+
+model Session {
+  id         Int       @id @default(autoincrement())
+  token      String
+  user_id    Int
+  /// @DtoRelationRequired
+  user       User      @relation("UserSessions", fields: [user_id], references: [id])
+  expire_at  DateTime?
+  /// @DtoReadOnly
+  created_at DateTime  @default(now())
+  /// @DtoReadOnly
+  updated_at DateTime  @updatedAt
+  /// @DtoReadOnly
+  deleted_at DateTime?
+
+  @@map("sessions")
+}

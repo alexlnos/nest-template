@@ -1,14 +1,13 @@
 import { Body, Controller } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
+import { Session } from '../../../.generated/prisma/session/entities'
+import { CreateUserDto, UpdateUserDto } from '../../../.generated/prisma/user/dto'
+import { User } from '../../../.generated/prisma/user/entities'
 import { UserAuthType } from '../../../_helpers/decorators/auth.helpers'
 import { UserDockGetOne, UserDockPost, UserDockPut } from '../../../_helpers/swagger/user.swagger.helper'
 import { UserDecorator } from '../decorators/user.decorator'
-import { CreateUserDto } from '../dto/create-user.dto'
-import { UpdateUserDto } from '../dto/update-user.dto'
 import { UserAuthDto } from '../dto/user-auth.dto'
-import { Session } from '../entity/session.entity'
-import { User } from '../entity/user.entity'
 import { UserService } from '../services/user.service'
 
 @Controller('user')

@@ -1,25 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { InjectRepository } from '@nestjs/typeorm'
+import { User } from '@prisma/client'
 import * as bcryptjs from 'bcryptjs'
-import { MoreThan, Repository } from 'typeorm'
 
+import { CreateUserDto, UpdateUserDto } from '../../../.generated/prisma/user/dto'
 import { ErrorCodeEnum } from '../../../_helpers/enums/validator/error.code.enum'
 import { ErrorDto } from '../../../_helpers/errors/error.dto'
-import { CreateUserDto } from '../dto/create-user.dto'
-import { UpdateUserDto } from '../dto/update-user.dto'
+import { AppPrismaService } from '../../../app.prisma.service'
 import { UserAuthDto } from '../dto/user-auth.dto'
-import { Session } from '../entity/session.entity'
-import { User } from '../entity/user.entity'
 
 @Injectable()
 export class UserService {
     constructor(
         private jwtService: JwtService,
-        @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(Session) private sessionRepository: Repository<Session>,
-        private configService: ConfigService
+        private configService: ConfigService,
+        private prisma: AppPrismaService
     ) {}
 
     get headers() {
@@ -29,7 +25,7 @@ export class UserService {
     }
 
     async authenticate(dto: UserAuthDto) {
-        const user = await this.userRepository.findOne({
+        const user = await this.prisma.user.findFirst({
             where: { email: dto.email },
         })
 
@@ -49,10 +45,12 @@ export class UserService {
         const saltRounds = 10
         const hashedPassword = await bcryptjs.hash(dto.password, saltRounds)
 
-        const user = await this.userRepository.save({
-            name: dto.name,
-            email: dto.email,
-            password: hashedPassword,
+        const user = await this.prisma.user.create({
+            data: {
+                name: dto.name,
+                email: dto.email,
+                password: hashedPassword,
+            },
         })
 
         if (!user) {
@@ -72,28 +70,36 @@ export class UserService {
             secret: this.configService.get('JWT_SECRET'),
         })
 
-        return await this.sessionRepository.save(
-            {
+        const session = await this.prisma.session.create({
+            data: {
                 token,
                 expire_at: new Date(userVerify.exp * 1000),
-                user,
+                user_id: user.id,
             },
-            { transaction: true }
-        )
+        })
+        return session
     }
 
     public async findSessionByToken(token: string) {
-        return await this.sessionRepository.findOne({
+        const session = await this.prisma.session.findFirst({
             where: {
-                token,
-                expire_at: MoreThan(new Date()),
+                token: token,
+                expire_at: {
+                    gt: new Date(),
+                },
             },
-            relations: { user: true },
+            include: {
+                user: true,
+            },
         })
+        return session
     }
 
     public async update(user: User, dto: UpdateUserDto) {
-        user = await this.userRepository.save(user)
-        return user
+        const updatedUser = await this.prisma.user.update({
+            where: { id: user.id },
+            data: dto,
+        })
+        return updatedUser
     }
 }
