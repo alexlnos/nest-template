@@ -41,6 +41,7 @@
         "swagger-ui-express": "^5.0.1"
     },
     "devDependencies": {
+        "@brakebein/prisma-generator-nestjs-dto": "^1.23.2",
         "@nestjs/cli": "^10.4.5",
         "@nestjs/schematics": "^10.1.4",
         "@nestjs/testing": "^10.4.1",
@@ -51,7 +52,6 @@
         "@types/supertest": "^6.0.2",
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.13.2",
-        "@vegardit/prisma-generator-nestjs-dto": "^1.5.1",
         "eslint": "^8.55.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.0.1",
