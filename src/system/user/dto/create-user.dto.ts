@@ -1,4 +1,4 @@
-import { TypeValidate, Validate } from '../../../_helpers/decorators/auth.helpers'
+import { TypeValidate, Validate } from '../../../_helpers/decorators/validation.helpers'
 
 export class CreateUserDto {
     @Validate(TypeValidate.EMAIL)

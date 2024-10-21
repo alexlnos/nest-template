@@ -1,7 +1,7 @@
 import { Get, Type, applyDecorators } from '@nestjs/common'
 import { ApiExtraModels, ApiOkResponse, ApiQuery, ApiResponse, getSchemaPath } from '@nestjs/swagger'
 
-import { UserAuth, UserAuthType } from '../decorators/reqests.helpers'
+import { UserAuth, UserAuthType } from '../decorators/auth.helpers'
 import { ErrorDto } from '../errors/error.dto'
 import { PaginatedResponseDto } from '../pagination/dto/pagination-response.dto'
 

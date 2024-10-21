@@ -1,17 +1,14 @@
 FROM node:20-slim
 
-# Создаем директорию для приложения и устанавливаем рабочую директорию
 RUN mkdir -p /app
 WORKDIR /app
 
-# Копируем файлы приложения в контейнер
-COPY . /app
-
-# Устанавливаем зависимости
+COPY package*.json ./
 RUN npm install
 
-# Запуск скрипта сборки
+COPY . .
 RUN npm run build
 
-# Устанавливаем точку входа
+EXPOSE 3000
+
 ENTRYPOINT ["npm", "run", "start:prod"]

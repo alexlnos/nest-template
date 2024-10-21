@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
-import * as bcrypt from 'bcrypt'
+import * as bcryptjs from 'bcryptjs'
 import { MoreThan, Repository } from 'typeorm'
 
 import { ErrorCodeEnum } from '../../../_helpers/enums/validator/error.code.enum'
@@ -37,7 +37,7 @@ export class UserService {
             throw new BadRequestException(new ErrorDto(ErrorCodeEnum.AUTH_FAIL))
         }
 
-        const isPasswordValid = await bcrypt.compare(dto.password, user.password)
+        const isPasswordValid = await bcryptjs.compare(dto.password, user.password)
         if (!isPasswordValid) {
             throw new BadRequestException(new ErrorDto(ErrorCodeEnum.AUTH_FAIL))
         }
@@ -47,7 +47,7 @@ export class UserService {
 
     async register(dto: CreateUserDto) {
         const saltRounds = 10
-        const hashedPassword = await bcrypt.hash(dto.password, saltRounds)
+        const hashedPassword = await bcryptjs.hash(dto.password, saltRounds)
 
         const user = await this.userRepository.save({
             name: dto.name,
