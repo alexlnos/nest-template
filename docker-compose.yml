@@ -10,7 +10,7 @@ services:
             - POSTGRES_USER=${DATABASE_USER}
             - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
         volumes:
-            - ./data/database:/var/lib/postgresql/data
+            - ./.data/database:/var/lib/postgresql/data
         ports:
             - "${DATABASE_PORT_OUT}:5432"
 
