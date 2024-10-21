@@ -1,9 +1,7 @@
 import { Body, Controller } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
-import { Session } from '../../../.generated/prisma/session/entities'
-import { CreateUserDto, UpdateUserDto } from '../../../.generated/prisma/user/dto'
-import { User } from '../../../.generated/prisma/user/entities'
+import { CreateUserDto, Session, UpdateUserDto, User } from '../../../.generated/prisma'
 import { UserAuthType } from '../../../_helpers/decorators/auth.helpers'
 import { UserDockGetOne, UserDockPost, UserDockPut } from '../../../_helpers/swagger/user.swagger.helper'
 import { UserDecorator } from '../decorators/user.decorator'

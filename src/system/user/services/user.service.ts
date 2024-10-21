@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt'
 import { User } from '@prisma/client'
 import * as bcryptjs from 'bcryptjs'
 
-import { CreateUserDto, UpdateUserDto } from '../../../.generated/prisma/user/dto'
+import { CreateUserDto, UpdateUserDto } from '../../../.generated/prisma'
 import { ErrorCodeEnum } from '../../../_helpers/enums/validator/error.code.enum'
 import { ErrorDto } from '../../../_helpers/errors/error.dto'
 import { AppPrismaService } from '../../../app.prisma.service'

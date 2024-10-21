@@ -1,9 +1,8 @@
 import { Get, Type, applyDecorators } from '@nestjs/common'
-import { ApiExtraModels, ApiOkResponse, ApiQuery, ApiResponse, getSchemaPath } from '@nestjs/swagger'
+import { ApiOkResponse, ApiQuery, ApiResponse, getSchemaPath } from '@nestjs/swagger'
 
 import { UserAuth, UserAuthType } from '../decorators/auth.helpers'
 import { ErrorDto } from '../errors/error.dto'
-import { PaginatedResponseDto } from '../pagination/dto/pagination-response.dto'
 
 export function PaginatedDocs<DTO>(
     dto: Type<DTO>,
@@ -11,7 +10,6 @@ export function PaginatedDocs<DTO>(
     userAuthType: UserAuthType = null,
     argDtos: Record<string, Type<any>> = {}
 ) {
-    const extraModels = Object.values(argDtos)
     const requiredKeys = Object.keys(argDtos)
 
     const decorators = []
@@ -23,7 +21,6 @@ export function PaginatedDocs<DTO>(
         ApiQuery({ name: 'search', required: false, type: () => String, description: 'Шашлык' }),
         ApiQuery({ name: 'sort', required: false, type: () => String, description: 'ASC' }),
         ApiQuery({ name: 'sortField', required: false, type: () => String, description: 'id' }),
-        ApiExtraModels(PaginatedResponseDto, dto, ...extraModels),
         ApiOkResponse({
             schema: {
                 allOf: [
