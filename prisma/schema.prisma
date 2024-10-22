@@ -39,6 +39,7 @@ generator nestjsDto {
 model User {
   id         Int       @id @default(autoincrement())
   name       String
+  /// @IsEmail
   email      String    @unique
   password   String
   sessions   Session[] @relation("UserSessions")
