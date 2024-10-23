@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 import { ErrorCodeEnum } from '../enums/validator/error.code.enum'
-import { ErrorValidationCodeEnum } from '../enums/validator/error.validation.code.enum'
 
 export class ErrorDto {
     @ApiProperty({ enum: ErrorCodeEnum, required: false, example: ErrorCodeEnum.AUTH_FAIL })
@@ -11,7 +10,7 @@ export class ErrorDto {
         type: () => String,
         required: false,
         isArray: true,
-        example: [`password|${ErrorValidationCodeEnum.IS_NOT_EMPTY}`],
+        example: [`password|IsNotEmpty`],
     })
     message?: string[]
 

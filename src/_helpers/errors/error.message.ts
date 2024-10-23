@@ -1,5 +1,3 @@
-import { ErrorValidationCodeEnum } from '../enums/validator/error.validation.code.enum'
-
-export function errorMessage(property: string, message: ErrorValidationCodeEnum) {
+export function errorMessage(property: string, message: string) {
     return `${property}|${message}`
 }

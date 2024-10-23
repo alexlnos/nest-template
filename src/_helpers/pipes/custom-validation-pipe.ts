@@ -1,6 +1,5 @@
 import { BadRequestException, ValidationError, ValidationPipe, ValidationPipeOptions } from '@nestjs/common'
 
-import { ErrorValidationCodeEnum } from '../enums/validator/error.validation.code.enum'
 import { errorMessage } from '../errors/error.message'
 
 export class CustomValidationPipe extends ValidationPipe {
@@ -25,13 +24,10 @@ export class CustomValidationPipe extends ValidationPipe {
 
         if (error.constraints) {
             for (const [constraintName] of Object.entries(error.constraints)) {
-                console.log(constraintName)
-                const errorCode = ErrorValidationCodeEnum[constraintName.toUpperCase()] || 'UNKNOWN_ERROR'
-
                 messages.push({
                     property: propertyPath,
-                    errorCode,
-                    message: errorMessage(propertyPath, errorCode),
+                    constraintName,
+                    message: errorMessage(propertyPath, constraintName),
                 })
             }
         }

@@ -1,9 +1,10 @@
-import { TypeValidate, Validate } from '../../../_helpers/decorators/validation.helpers'
+import { IsEmail, IsNotEmpty } from 'class-validator'
 
 export class UserAuthDto {
-    @Validate(TypeValidate.EMAIL)
+    @IsEmail()
+    @IsNotEmpty()
     email: string
 
-    @Validate(TypeValidate.STRING)
+    @IsNotEmpty()
     password: string
 }
