@@ -1,9 +1,10 @@
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
+import { ClassSerializerInterceptor } from '@nestjs/common'
 import { NestFactory, Reflector } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { useContainer } from 'class-validator'
 import { config } from 'dotenv'
 
+import { CustomValidationPipe } from './_helpers/pipes/custom-validation-pipe'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -11,7 +12,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, { cors: true, bodyParser: true })
     app.setGlobalPrefix('api')
     app.useGlobalPipes(
-        new ValidationPipe({
+        new CustomValidationPipe({
             transform: true,
             transformOptions: { enableImplicitConversion: true },
             whitelist: true,
@@ -32,4 +33,4 @@ async function bootstrap() {
     await app.listen(3000)
 }
 
-bootstrap()
+bootstrap().then(() => {})

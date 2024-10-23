@@ -1,5 +1,3 @@
-version: "3"
-
 services:
     db:
         image: postgres:latest
@@ -16,8 +14,8 @@ services:
 
     app:
         build:
-            context: .
-            dockerfile: Dockerfile
+            context: ..
+            dockerfile: .docker/Dockerfile
         restart: always
         ports:
             - "3000:3000"
