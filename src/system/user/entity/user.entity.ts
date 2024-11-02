@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { Exclude } from 'class-transformer'
 import { Column, Entity } from 'typeorm'
 
-import { BaseEntity } from '../../../_helpers/database/base/base.entity'
+import { BaseEntity } from '../../../../common/database/base/base.entity'
 
 @Entity('users')
 export class User extends BaseEntity {

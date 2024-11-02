@@ -1,8 +1,8 @@
 import { Body, Controller } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 
-import { UserAuthType } from '../../../_helpers/decorators/auth.helpers'
-import { UserDockGetOne, UserDockPost, UserDockPut } from '../../../_helpers/swagger/user.swagger.helper'
+import { UserAuthType } from '../../../../common/decorators/auth.helpers'
+import { UserDockGetOne, UserDockPost, UserDockPut } from '../../../../common/swagger/user.swagger.helper'
 import { UserDecorator } from '../decorators/user.decorator'
 import { CreateUserDto } from '../dto/create-user.dto'
 import { UpdateUserDto } from '../dto/update-user.dto'

@@ -1,6 +1,7 @@
-import { applyDecorators, UseGuards } from '@nestjs/common'
+import { UseGuards, applyDecorators } from '@nestjs/common'
 import { ApiBearerAuth } from '@nestjs/swagger'
-import { UserGuard } from '../../system/user/guards/user.guard'
+
+import { UserGuard } from '../../src/system/user/guards/user.guard'
 
 export enum UserAuthType {
     USER,
