@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm'
 
 import { User } from './user.entity'
-import { BaseEntity } from '../../../../common/database/base/base.entity'
+import { BaseEntity } from '@common/database/base/base.entity'
 
 @Entity('sessions')
+@Index('IDX_session_user_uuid', ['user_uuid'])
 export class Session extends BaseEntity {
     @ApiProperty()
     @Column()
@@ -12,12 +13,13 @@ export class Session extends BaseEntity {
 
     @ApiProperty()
     @ManyToOne(() => User)
-    @JoinColumn({ name: 'user_id' })
+    @JoinColumn({ name: 'user_uuid', referencedColumnName: 'uuid' })
+    @Index('FK_session_user_uuid')
     user: User
 
     @ApiProperty()
-    @Column({ name: 'user_id' })
-    user_id: number
+    @Column({ name: 'user_uuid' })
+    user_uuid: string
 
     @ApiProperty()
     @Column({

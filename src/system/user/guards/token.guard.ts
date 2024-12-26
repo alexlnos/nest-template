@@ -1,6 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 
 import { UserService } from '../services/user.service'
+import { ErrorDto } from '@common/errors/error.dto'
+import { ErrorCodeEnum } from '@common/enums/validator/error.code.enum'
 
 @Injectable()
 export class TokenGuard implements CanActivate {
@@ -12,7 +14,7 @@ export class TokenGuard implements CanActivate {
 
         if (token) {
             const session = await this.userService.findSessionByToken(token.replace('Bearer ', ''))
-            if (!session) return false
+            if (!session) throw new ErrorDto(ErrorCodeEnum.UNAUTHORIZED)
 
             request.session = session
             request.user = session.user

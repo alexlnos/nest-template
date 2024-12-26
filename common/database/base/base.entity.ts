@@ -9,18 +9,18 @@ import {
 
 export abstract class BaseEntity extends BaseEntityTypeOrm {
     @ApiProperty()
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryGeneratedColumn('uuid')
+    uuid: string
 
     @ApiProperty()
-    @CreateDateColumn({ type: 'timestamptz' })
-    created_at: Date
+    @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+    createdAt: Date
 
     @ApiProperty()
-    @UpdateDateColumn({ type: 'timestamptz' })
-    updated_at: Date
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+    updatedAt: Date
 
     @ApiProperty()
-    @DeleteDateColumn({ type: 'timestamptz' })
-    deleted_at: Date
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
+    deletedAt: Date
 }

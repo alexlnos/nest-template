@@ -1,26 +1,41 @@
-import { BadRequestException } from '@nestjs/common'
-import { DeepPartial, FindManyOptions, FindOneOptions, Repository } from 'typeorm'
+import { DeepPartial, FindOneOptions, Repository } from 'typeorm'
 
 import { ErrorCodeEnum } from '../../enums/validator/error.code.enum'
 import { ErrorDto } from '../../errors/error.dto'
-import { PaginatedResponseDto } from '../../pagination/dto/pagination-response.dto'
+import { paginate, PaginateConfig, Paginated, PaginateQuery } from 'nestjs-paginate'
 
 export class BaseService<T, SaveDto extends DeepPartial<T>, UpdateDto extends DeepPartial<T>> {
     constructor(private readonly repository: Repository<T>) {}
 
-    async find(options: FindManyOptions<T>) {
-        const [result, total] = await this.repository.findAndCount({
-            ...options,
-        })
-
-        return new PaginatedResponseDto(result, total)
+    async findAll(query: PaginateQuery, config: PaginateConfig<T>): Promise<Paginated<T>> {
+        return await paginate(query, this.repository, config)
     }
 
-    async findOne(options: FindOneOptions<T>) {
+    async getOne(options: FindOneOptions<T>) {
         try {
             return await this.repository.findOne(options)
         } catch (e) {
-            throw new BadRequestException(new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND))
+            throw new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND)
+        }
+    }
+
+    async findOne(uuid: string) {
+        try {
+            return await this.repository.findOneOrFail({
+                where: { uuid },
+            } as FindOneOptions)
+        } catch (e) {
+            throw new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND)
+        }
+    }
+
+    async findOneByCode(code: string) {
+        try {
+            return await this.repository.findOneOrFail({
+                where: { code },
+            } as FindOneOptions)
+        } catch (e) {
+            throw new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND)
         }
     }
 
@@ -30,29 +45,29 @@ export class BaseService<T, SaveDto extends DeepPartial<T>, UpdateDto extends De
 
             return await this.repository.save(entity)
         } catch (e) {
-            throw new BadRequestException(new ErrorDto(ErrorCodeEnum.ENTITY_CREATION_FAIL, e.message))
+            throw new ErrorDto(ErrorCodeEnum.ENTITY_CREATION_FAIL, e.message)
         }
     }
 
-    async update(id: number, partialEntity: UpdateDto) {
-        const entity = await this.repository.findOne({ where: { id } } as FindOneOptions)
+    async update(uuid: string, partialEntity: UpdateDto) {
+        const entity = await this.repository.findOne({ where: { uuid } } as FindOneOptions)
 
         if (!entity) {
-            throw new BadRequestException(new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND))
+            throw new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND)
         }
 
         const updatedEntity = this.repository.merge(entity, partialEntity)
-        return this.repository.save(updatedEntity)
+        return await this.repository.save(updatedEntity)
     }
 
-    async delete(id: number) {
-        const entity = await this.repository.findOne({ where: { id } } as FindOneOptions)
+    async remove(uuid: string) {
+        const entity = await this.repository.findOne({ where: { uuid } } as FindOneOptions)
 
         if (!entity) {
-            throw new BadRequestException(new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND))
+            throw new ErrorDto(ErrorCodeEnum.ENTITY_NOT_FOUND)
         }
 
-        await this.repository.softDelete(id)
-        return this.repository.findOne({ where: { id }, withDeleted: true } as FindOneOptions)
+        await this.repository.softDelete(uuid)
+        return await this.repository.findOne({ where: { uuid }, withDeleted: true } as FindOneOptions)
     }
 }

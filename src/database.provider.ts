@@ -12,6 +12,6 @@ export const buildDataSourceOptions = (configService: ConfigService): DataSource
     password: configService.get('DATABASE_PASSWORD'),
     database: configService.get('DATABASE_DB'),
     entities: [User, Session],
-    logging: false,
+    logging: true,
     synchronize: true,
 })
